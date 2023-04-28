@@ -2,7 +2,7 @@ name: base_flutter_project
 version: 1.0.0+1
 publish_to: none
 description: A new Flutter project.
-environment: {sdk: '>=2.17.3 <3.0.0'}
+environment: { sdk: '>=2.17.3 <3.0.0' }
 dependencies:
   cupertino_icons: ^1.0.2
   flutter_screenutil: ^5.7.0
@@ -44,17 +44,17 @@ dependencies:
   flutter_native_splash: ^2.2.16
   percent_indicator: ^4.0.1
   get: 4.6.5
-  flutter: {sdk: flutter}
-  flutter_localizations: {sdk: flutter}
+  flutter: { sdk: flutter }
+  flutter_localizations: { sdk: flutter }
   json_annotation: ^4.8.0
 dev_dependencies:
   flutter_lints: ^2.0.0
-  flutter_test: {sdk: flutter}
+  flutter_test: { sdk: flutter }
   build_runner: null
   json_serializable: ^6.6.0
   isar_generator: ^3.0.5
 flutter:
-  assets: [assets/image/]
+  assets: [ assets/image/ ]
   uses-material-design: true
-  fonts: []
-flutter_intl: {enabled: true}
+  fonts: [ ]
+flutter_intl: { enabled: true }
