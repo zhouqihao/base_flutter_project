@@ -1,0 +1,73 @@
+name: base_flutter_project
+version: 1.0.0+1
+publish_to: none
+description: A new Flutter project.
+environment: 
+  sdk: '>=2.17.3 <3.0.0'
+
+dependencies: 
+  cupertino_icons: ^1.0.2
+  flutter_screenutil: ^5.7.0
+  connectivity_plus: ^2.3.4
+  extended_image: ^6.2.2
+  dio: ^5.1.1
+  flutter_easyloading: ^3.0.5
+  fluttertoast: ^8.2.1
+  shared_preferences: ^2.0.20
+  easy_rich_text: ^1.2.0
+  pull_to_refresh: ^2.0.0
+  intl: ^0.17.0
+  event_bus: ^2.0.0
+  package_info_plus: ^3.0.3
+  flutter_cache_manager: ^3.3.0
+  install_plugin_v2: ^1.0.0
+  permission_handler: ^10.2.0
+  app_settings: ^4.2.0
+  path_provider: ^2.0.14
+  camera: ^0.10.4
+  video_player: ^2.6.1
+  flutter_exif_rotation: ^0.5.1
+  device_info_plus: ^8.2.0
+  path: ^1.8.2
+  flutter_inappwebview: ^5.7.2+3
+  open_app_file: ^4.0.1
+  uuid: ^3.0.7
+  flutter_keyboard_visibility: ^5.4.1
+  flutter_smart_dialog: ^4.8.2+3
+  wechat_assets_picker: ^8.3.1+1
+  wechat_camera_picker: ^3.7.0
+  file_picker: 5.2.0
+  isar: 3.0.5
+  isar_flutter_libs: 3.0.5
+  lottie: 1.2.2
+  photo_view: 0.14.0
+  share_plus: ^6.3.1
+  scrollable_positioned_list: ^0.3.5
+  flutter_native_splash: ^2.2.16
+  percent_indicator: ^4.0.1
+  get: 4.6.5
+  flutter: 
+    sdk: flutter
+  flutter_localizations:
+    sdk: flutter
+
+  json_annotation: ^4.8.0
+
+dev_dependencies: 
+  flutter_lints: ^2.0.0
+  flutter_test: 
+    sdk: flutter
+  build_runner:
+
+  json_serializable: ^6.6.0
+  isar_generator: ^3.0.5
+
+flutter: 
+  assets: 
+    - assets/image/
+    - assets/font/
+  uses-material-design: true
+
+flutter_intl: 
+  enabled: true
+
