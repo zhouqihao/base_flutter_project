@@ -1,25 +1,26 @@
 import 'dart:async';
+import 'dart:collection';
 import 'dart:convert';
 import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:base_flutter_project/extension/object_extensions.dart';
+import 'package:base_flutter_project/util/string_util.dart';
 import 'package:crypto/crypto.dart';
 import 'package:get/get.dart';
 import 'package:get/get_connect/http/src/request/request.dart';
 
-
 import '../../model/base/base_response.dart';
 import '../../net_config.dart';
 
-class BaseProvider<T  > extends GetConnect {
+class BaseProvider<T> extends GetConnect {
   @override
   void onInit() {
     /// 请求url
     httpClient.baseUrl = NetConfig.instance.baseUrl;
 
     // // 解码器.
-    httpClient.defaultDecoder = _defaultDecode;
+    // httpClient.defaultDecoder = _defaultDecode;
 
     /// 请求拦截.
     httpClient.addRequestModifier<dynamic>(_requestIntercept);
@@ -28,101 +29,70 @@ class BaseProvider<T  > extends GetConnect {
     httpClient.addResponseModifier<dynamic>(_responseIntercept);
   }
 
-
-
   FutureOr<Request<dynamic>> _requestIntercept(Request<dynamic> request) async {
-    customPrintInfo('request url： ${request.url.toString()}');
-    customPrintInfo('request method： ${request.method}');
+    customPrintInfo('开始请求 url： ${request.url.toString()}');
+    customPrintInfo('method： ${request.method}');
 
-    //todo 添加请求参数
+    //todo 添加公共请求头
 
     return request;
   }
 
   ///响应拦截
-  FutureOr<Response<dynamic>> _responseIntercept(request, response) {
-    customPrintInfo(
-        'addResponseModifier： ${response.toString()}, ${request.toString()}');
+  FutureOr<Response<dynamic>> _responseIntercept(request,Response response) {
+    if (response.body == null) {
+      customPrintInfo('接口异常:url:${request.url.toString()} ');
+      customPrintInfo(
+          '状态码:${response.statusCode}   错误信息:${response.statusText}');
+      customPrintInfo('详情:${response.bodyString}');
+    }else{
+      customPrintInfo('请求成功:url:${request.url.toString()} ');
+      customPrintInfo('响应数据:${jsonEncode(jsonDecode(response.bodyString??""))} ');
 
+    }
     return Future.value(response);
   }
 
-  /// 默认的解码器
-  dynamic _defaultDecode(dynamic response) {
-    customPrintInfo('preDecode： ${response.toString()}');
+  Type typeOf<T>() => T;
 
-    var result = response;
-
-    if (result is String) {
-      result = json.decode(result);
-    } else if (result is Map) {
-      if (result[NetConfig.dataName] != null) {
-        String content = result[NetConfig.dataName];
-        customPrintInfo(content);
-        result = json.decode(content);
-      }
+  ///数据解析
+  BaseResponse<T>? _defaultDecode<T>(data, Decoder<T>? decoder) {
+    if (data != null) {
+      try {
+        return BaseResponse.fromJson(
+            data,
+            decoder ??
+                (data) {
+                  ///文本类型稍微转一下
+                  if (typeOf<T>() == typeOf<String?>() ||
+                      typeOf<T>() == typeOf<String?>()) {
+                    return data.toString() as T;
+                  }
+                  return data;
+                });
+      } catch (e) {}
     }
-
-    return result as Map<String, dynamic>;
+    return null;
   }
 
-  @override
-  Future<Response<T>> get<T>(
+  ///Get请求
+  Future<BaseResponse<T>?> doGet<T>(
     String url, {
     Map<String, String>? headers,
     String? contentType,
-    Map<String, dynamic>? query,
     Decoder<T>? decoder,
-  }) {
-
-    return super
-        .get<T>(
-      url,
-      headers: headers,
-      contentType: contentType,
-      query: query,
-      decoder: decoder,
-    ).then((value) {
-      if (value.body == null) {
-        String errorText = value.statusText ?? '';
-        /// 请求失败处理
-        return Future.error(errorText);
-      }
-      return value;
-    });
-    try {
-
-    } catch (e) {
-      return Future.error(e);
-    }
-  }
-
-  @override
-  Future<Response<T>> post<T>(
-    String? url,
-    dynamic body, {
-    String? contentType,
-    Map<String, String>? headers,
     Map<String, dynamic>? query,
-    Decoder<T>? decoder,
-    Progress? uploadProgress,
   }) {
     return super
-        .post<T>(url, body,
-            contentType: contentType,
+        .get<BaseResponse<T>?>(url,
             headers: headers,
+            contentType: contentType,
             query: query,
-            decoder: decoder,
-            uploadProgress: uploadProgress)
+            decoder: (data) => _defaultDecode(data, decoder))
         .then((value) {
-      if (value.body == null) {
-        String errorText = value.statusText ?? '';
-        customPrintInfo(errorText);
-
-        /// 请求失败处理
-        return Future.error(errorText);
-      }
-      return value;
+      return value.body;
     });
+
+    return Future(() => null);
   }
 }

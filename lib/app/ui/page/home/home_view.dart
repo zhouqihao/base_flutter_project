@@ -24,7 +24,11 @@ class HomeView extends GetView<HomeController> {
               width: double.maxFinite,
               child: Center(
                 child: Column(
-                  children: [_networkStatus(), _testNetButton()],
+                  children: [
+                    _networkStatus(),
+                    _testSingleResponse(),
+                    _testMultiResponse()
+                  ],
                 ),
               ),
             ),
@@ -39,17 +43,30 @@ class HomeView extends GetView<HomeController> {
     );
   }
 
-  _testNetButton() {
+  _testSingleResponse() {
     return InkWell(
-      onTap: () {
-        get<TestUserProvider>().getTestUser();
-      },
+      onTap: controller.getSingleUser,
       child: Container(
+        margin: EdgeInsets.only(top: 10),
         color: Colors.red.withOpacity(.2),
         child: Center(
-          child: Text("获取测试用户数据"),
+          child: Text("获取单个测试用户网络数据"),
         ),
-        height: 30.w,
+        height: 40.w,
+      ),
+    );
+  }
+
+  _testMultiResponse() {
+    return InkWell(
+      onTap:controller.getMultiUser,
+      child: Container(
+        margin: EdgeInsets.only(top: 10),
+        color: Colors.red.withOpacity(.2),
+        child: Center(
+          child: Text("获取多个测试用户网络数据"),
+        ),
+        height: 40.w,
       ),
     );
   }

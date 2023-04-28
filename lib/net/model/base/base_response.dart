@@ -12,28 +12,30 @@ enum ResponseCode {
   @JsonValue(200)
   success200,
 
-
   /// 维护
   @JsonValue(404)
   error404,
 }
 
-
-@JsonSerializable()
-class BaseResponse {
-  @JsonKey(name: 'code', defaultValue: ResponseCode.success)
+@JsonSerializable(genericArgumentFactories: true)
+class BaseResponse<T> {
+  @JsonKey(name: NetConfig.responseCodeName, defaultValue: ResponseCode.success)
   ResponseCode code = ResponseCode.success;
 
-  @JsonKey(name: 'msg', includeIfNull: true)
+  @JsonKey(name: NetConfig.responseMsgName, includeIfNull: true)
   String? msg;
 
-  @JsonKey(name: NetConfig.dataName, includeIfNull: true)
-  dynamic data;
+  @JsonKey(name: NetConfig.responseDataName, includeIfNull: true)
+  T? data;
 
   BaseResponse();
 
-  factory BaseResponse.fromJson(Map<String, dynamic> json) =>
-      _$BaseResponseFromJson(json);
+  factory BaseResponse.fromJson(
+    Map<String, dynamic> json,
+    T Function(dynamic json) fromJsonT,
+  ) =>
+      _$BaseResponseFromJson<T>(json, fromJsonT);
 
-  Map<String, dynamic> toJson() => _$BaseResponseToJson(this);
+  Map<String, dynamic> toJson(Object? Function(T value) toJsonT) =>
+      _$BaseResponseToJson<T>(this, toJsonT);
 }

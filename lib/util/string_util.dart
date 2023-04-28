@@ -1,6 +1,7 @@
 
 class StringUtil{
 
+  ///这个用来解决Text省略号有时候省略太多了的问题，
   static String  breakWord(String word){
     if(word == null || word.isEmpty){
       return word;
@@ -12,5 +13,7 @@ class StringUtil{
     });
     return breakWord;
   }
+
+
 
 }

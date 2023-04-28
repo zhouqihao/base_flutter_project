@@ -4,23 +4,34 @@ import 'package:json_annotation/json_annotation.dart';
 part 'test_user_model.g.dart';
 
 @JsonSerializable()
-class TestUser   {
-  /// 登录token.
+class TestUserModel  {
+  @JsonKey(defaultValue: 0)
+  final int account;
+  @JsonKey(defaultValue: '')
+  final String nickname;
   @JsonKey(name: 'user_id', defaultValue: 0)
-  num id = 0;
+  final int userId;
 
-  /// 聊天账号
-  @JsonKey(name: 'account')
-  String? account;
+   const TestUserModel({
+    required this.account,
+    required this.nickname,
+    required this.userId,
+  });
 
-  /// 用户昵称
-  @JsonKey(name: 'nickname')
-  String? nickname;
+  factory TestUserModel.fromJson(Map<String, dynamic> json) =>
+      _$TestUserModelFromJson(json);
 
+  Map<String, dynamic> toJson() => _$TestUserModelToJson(this);
 
-  TestUser();
-
-  factory TestUser.fromJson(Map<String, dynamic> json) => _$TestUserFromJson(json);
-
-  Map<String, dynamic> toJson() => _$TestUserToJson(this);
+  TestUserModel copyWith({
+    int? account,
+    String? nickname,
+    int? userId,
+  }) {
+    return TestUserModel(
+      account: account ?? this.account,
+      nickname: nickname ?? this.nickname,
+      userId: userId ?? this.userId,
+    );
+  }
 }

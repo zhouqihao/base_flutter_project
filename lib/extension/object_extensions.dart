@@ -19,7 +19,17 @@ extension ObjectExtensions on Object {
   void customPrintInfo(Object info, {String? tag, bool isForcePrint = false}) {
     if (isForcePrint || isDebug) {
       String className = this.runtimeType.toString();
-      log("${className} ${(tag ?? "").isNotEmpty ? '[' + (tag ?? '') + '] ' : ''} ${DateUtil.formatTime(DateTime.now())} : ${info.toString()}");
+      ///这里只是为了让打log看着整齐，尽量让类名占20个字符
+      if (className.length < 20) {
+        for (int i = className.length; i < 20; i++) {
+          className = className + " ";
+        }
+      }
+      String start =
+          "${className} ${(tag ?? "").isNotEmpty ? '[' + (tag ?? '') + '] ' : ''} ${DateUtil.formatTime(DateTime.now())} ";
+
+
+      log("${start}: ${info.toString()}");
     }
   }
 
